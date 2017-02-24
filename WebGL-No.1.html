@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="three.js"></script>
+        
+        <script type="text/javascript">
+            function init() {
+                var renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('mainCanvas')
+                });
+                renderer.setClearColor(0x808080);
+                var scene = new THREE.Scene();
+                
+                // camera
+                var camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 10);
+                camera.position.set(4, 3, 5);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+                scene.add(camera);
+                
+                //添加灯光
+                var light = new THREE.PointLight(0xffffff, 1, 100);
+                light.position.set(10, 15, 5);
+                scene.add(light);
+
+                var material = new THREE.MeshLambertMaterial({
+                            color: 0xFFFFF0,
+                            wireframe: true
+                        })
+
+                //车底部
+                var cube1 = new THREE.Mesh(new THREE.CubeGeometry(3, 0.5, 1.5),material)
+                scene.add(cube1);
+
+                //车顶部
+                var cube2 = new THREE.Mesh(new THREE.CubeGeometry(1.5, 0.6, 1.5),material)
+                cube2.position.y = 0.55;
+                scene.add(cube2);
+
+                //车轮1
+                var torus1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.1, 12, 18), material);
+                torus1.position.x = -1.3;
+                torus1.position.y = -0.6;
+                torus1.position.z = 0.25;
+                scene.add(torus1);
+
+                //车轮2
+                var torus1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.1, 12, 18), material);
+                torus1.position.x = 0.4;
+                torus1.position.y = -0.6;
+                torus1.position.z = 0.25;
+                scene.add(torus1);
+                
+                // render
+                renderer.render(scene, camera);
+            }
+        </script>
+
+        <title>A little car</title>
+    </head>
+    
+    <body onload="init()">
+    <div style="margin: 0 auto; width:1200px">
+        <canvas id="mainCanvas" width="1200px" height="900px"></canvas>
+    </div>
+    </body>
+</html>
