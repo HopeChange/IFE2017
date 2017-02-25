@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="three.js"></script>
+        
+        <script type="text/javascript">
+            function init() {
+                var renderer = new THREE.WebGLRenderer({
+                    canvas: document.getElementById('mainCanvas')
+                });
+                renderer.setClearColor(0x919191);
+                var scene = new THREE.Scene();
+                
+                // camera
+                var camera = new THREE.OrthographicCamera(-2, 2, 1.5, -1.5, 1, 10);
+                camera.position.set(4, 3, 5);
+                camera.lookAt(new THREE.Vector3(0, 0, 0));
+                scene.add(camera);
+                
+                var light = new THREE.DirectionalLight()
+                light.position.set(3, 5, 4)
+                scene.add(light)
+
+                var material = new THREE.MeshLambertMaterial({
+                            color: 0xffffff,
+                            //wireframe: true
+                        })
+
+                //车底部
+                var cube1 = new THREE.Mesh(new THREE.CubeGeometry(3, 0.5, 1.5),material)
+                cube1.castShadow = true;
+                scene.add(cube1);
+
+                //车顶部
+                var cube2 = new THREE.Mesh(new THREE.CubeGeometry(1.5, 0.6, 1.5),material)
+                cube2.position.y = 0.55;
+                cube2.castShadow = true;
+                scene.add(cube2);
+
+                //车轮1
+                var torus1 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.1, 12, 18), material);
+                torus1.position.set (-0.8, -0.25, 0.75)
+                torus1.castShadow = true;
+                scene.add(torus1);
+                
+                //车轮2
+                var torus2 = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.1, 12, 18), material);
+                torus2.position.set (0.8, -0.25, 0.75) 
+                torus2.castShadow = true;
+                scene.add(torus2);
+                
+                //地板平面
+                var floor = new THREE.Mesh(new THREE.PlaneGeometry(4, 4, 16, 16), 
+                    new THREE.MeshLambertMaterial({
+                        color: 0x9BCD9B
+                    })
+                )
+                floor.rotation.x = -Math.PI / 2;
+                floor.position.y = -0.6;
+                floor.receiveShadow = true;
+                scene.add(floor);
+
+                var spotLight = new THREE.SpotLight(0xffffff, 1, 100, Math.PI/6, 25)
+                spotLight.position.set(-6, 5, 4)
+                spotLight.target = cube1
+                // 产生阴影
+                spotLight.castShadow = true
+
+                spotLight.shadow.camera.near = 1
+                spotLight.shadow.camera.far = 100
+                spotLight.shadow.camera.visible = true
+
+                spotLight.shadow.mapSize.Width = 1024
+                spotLight.shadow.mapSize.Height = 1024
+
+                scene.add(spotLight)
+                
+                // 4、开启渲染阴影
+                renderer.shadowMap.enabled = true
+
+                // render
+                renderer.render(scene, camera);
+            }
+        </script>
+
+        <title>A little car</title>
+    </head>
+    
+    <body onload="init()">
+    <div style="margin: 0 auto; width:1200px">
+        <canvas id="mainCanvas" width="1200px" height="900px"></canvas>
+    </div>
+    </body>
+</html>
